@@ -1,0 +1,119 @@
+{
+    "profile": {
+        "name": "Dhiya Muhammad Azka",
+        "role": "Junior Full Stack Developer",
+        "tagline": "Membangun aplikasi web modern dengan backend yang rapi dan frontend yang menarik.",
+        "location": "Yogyakarta, Indonesia",
+        "email": "muhazka@students.amikom.ac.id",
+        "phone": "+62 858-8687-7910",
+        "website": "https://mohka.vercel.app",
+        "photoText": "DMA",
+        "photo": "/image/ppweb.jpg",
+        "summary": "Saya adalah mahasiswa Informatika yang memiliki minat pada pengembangan aplikasi web, REST API, desain antarmuka, dan integrasi teknologi AI. Saya terbiasa membangun project menggunakan JavaScript, Node.js, Express.js, React.js, dan database dasar."
+    },
+    "socials": [
+        {
+            "label": "GitHub",
+            "url": "https://github.com/mehmedazka"
+        },
+        {
+            "label": "LinkedIn",
+            "url": "https://linkedin.com/"
+        },
+        {
+            "label": "Instagram",
+            "url": "https://instagram.com/mhmdzkaa._"
+        }
+    ],
+    "stats": [
+        {
+            "label": "Projects",
+            "value": "12+"
+        },
+        {
+            "label": "Experience",
+            "value": "1 Year"
+        },
+        {
+            "label": "Certificates",
+            "value": "5"
+        }
+    ],
+    "skills": [
+        {
+            "name": "HTML & CSS",
+            "level": 90
+        },
+        {
+            "name": "JavaScript",
+            "level": 85
+        },
+        {
+            "name": "React.js",
+            "level": 80
+        },
+        {
+            "name": "Node.js",
+            "level": 78
+        },
+        {
+            "name": "Express.js",
+            "level": 75
+        },
+        {
+            "name": "Database",
+            "level": 70
+        }
+    ],
+    "experiences": [
+        {
+            "position": "Frontend Developer Intern",
+            "company": "Digital Creative Studio",
+            "period": "2025 - 2026",
+            "description": "Membantu membuat tampilan dashboard, slicing UI dari desain Figma, dan integrasi API sederhana menggunakan React.js."
+        },
+        {
+            "position": "Freelance Web Developer",
+            "company": "Personal Project",
+            "period": "2024 - 2025",
+            "description": "Membuat website profil usaha, landing page, dan sistem CRUD sederhana untuk UMKM."
+        }
+    ],
+    "education": [
+        {
+            "degree": "S1 Informatika",
+            "school": "AMIKOM University",
+            "period": "2023 - Sekarang",
+            "description": "Fokus pada web programming, database, UI/UX, dan pengembangan aplikasi berbasis teknologi modern."
+        }
+    ],
+    "projects": [
+        {
+            "title": "Smart Portfolio Website",
+            "description": "Website portfolio personal dengan React.js dan animasi CSS modern.",
+            "tech": [
+                "React.js",
+                "CSS",
+                "Vite"
+            ]
+        },
+        {
+            "title": "REST API Product Management",
+            "description": "Backend CRUD produk menggunakan Node.js dan Express.js.",
+            "tech": [
+                "Node.js",
+                "Express.js",
+                "JSON"
+            ]
+        },
+        {
+            "title": "AI Resume Helper",
+            "description": "Prototype aplikasi yang membantu membuat ringkasan CV menggunakan AI prompt.",
+            "tech": [
+                "JavaScript",
+                "AI Prompting",
+                "Frontend"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,22 @@
+{
+    "name": "cv-node-express-react-render",
+    "version": "1.0.0",
+    "description": "Website CV React dengan Backend Node.js Express JSON siap deploy ke Render",
+    "scripts": {
+        "install-all": "npm install --prefix nodejs-backend && npm install --prefix react-frontend",
+        "build": "npm run build --prefix react-frontend && node build.js",
+        "start": "npm start --prefix nodejs-backend",
+        "dev:backend": "npm run dev --prefix nodejs-backend",
+        "dev:frontend": "npm run dev --prefix react-frontend"
+    },
+    "keywords": [
+        "nodejs",
+        "express",
+        "react",
+        "vite",
+        "render",
+        "cv"
+    ],
+    "author": "BCI Class - AMIKOM University",
+    "license": "ISC"
+}
