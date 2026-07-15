@@ -17,7 +17,7 @@ function App() {
         const result = await response.json()
         if (!result.success) throw new Error(result.message)
         setCv(result.data)
-      } catch (err) {
+      } catch {
         setError('Backend lu ngadat ato belom lu nyalain? Cek http://localhost:5000')
       } finally {
         setLoading(false)
