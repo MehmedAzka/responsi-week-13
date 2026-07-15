@@ -1,209 +1,195 @@
 import { useEffect, useState } from 'react'
+import './App.css'
+
 const IS_PRODUCTION = import.meta.env.PROD
+const API_URL = IS_PRODUCTION ? '/api/cv' : 'http://localhost:5000/api/cv'
 
-const API_URL = IS_PRODUCTION
-  ? '/api/cv'
-  : 'http://localhost:5000/api/cv'
-
-const BACKEND_URL = IS_PRODUCTION
-  ? ''
-  : 'http://localhost:5000'
-  
 function App() {
   const [cv, setCv] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [theme, setTheme] = useState('dark')
+
   useEffect(() => {
     async function fetchCv() {
       try {
         const response = await fetch(API_URL)
         const result = await response.json()
-        if (!result.success) {
-          throw new Error(result.message)
-        }
+        if (!result.success) throw new Error(result.message)
         setCv(result.data)
       } catch (err) {
-        setError('Gagal mengambil data CV. Pastikan backend berjalan di http://localhost:5000')
+        setError('Backend lu ngadat ato belom lu nyalain? Cek http://localhost:5000')
       } finally {
         setLoading(false)
       }
     }
     fetchCv()
   }, [])
-  if (loading) {
-    return (
-      <div className="state-screen">
-        <div className="loader"></div>
-        <p>Memuat CV profesional...</p>
-      </div>
+
+  // Observers buat handle animasi pas bento box masuk viewport
+  useEffect(() => {
+    if (loading) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) entry.target.classList.add('active')
+        })
+      },
+      { threshold: 0.05 }
     )
-  }
-  if (error) {
-    return (
-      <div className="state-screen">
-        <h1>Terjadi Kesalahan</h1>
-        <p>{error}</p>
-      </div>
-    )
-  }
+    document.querySelectorAll('.bento-card').forEach((el) => observer.observe(el))
+    return () => observer.disconnect()
+  }, [loading])
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme)
+  }, [theme])
+
+  if (loading) return <div className="loading-screen"><div className="spinner"></div><p>Sabar dikit napa, lagi narik data...</p></div>
+  if (error) return <div className="error-screen"><h1>Hancur Cuy!</h1><p>{error}</p></div>
+
   const { profile, socials, stats, skills, experiences, education, projects } = cv
+
   return (
-    <main className="page-shell">
-      <div className="orb orb-one"></div>
-      <div className="orb orb-two"></div>
-      <div className="orb orb-three"></div>
-      <section className="hero-section">
-        <nav className="navbar">
-          <div className="brand">CV<span>Studio</span></div>
-          <div className="nav-links">
-            <a href="#skills">Skills</a>
-            <a href="#experience">Experience</a>
-            <a href="#projects">Projects</a>
-            <a href="#contact">Contact</a>
-          </div>
-        </nav>
-        <div className="hero-grid">
-          <div className="hero-copy">
-            <div className="eyebrow">Professional Digital CV</div>
-            <h1>{profile.name}</h1>
-            <h2>{profile.role}</h2>
-            <p className="tagline">{profile.tagline}</p>
-            <div className="hero-actions">
-              <a href="#projects" className="primary-button">Lihat Project</a>
-              <a href={`mailto:${profile.email}`} className="secondary-button">Hubungi Saya</a>
-            </div>
-            <div className="quick-info">
-              <span>{profile.location}</span>
-              <span>{profile.email}</span>
-              <span>{profile.phone}</span>
-            </div>
-          </div>
-          <div className="profile-card">
-            <div className="avatar-ring">
-              <div className="avatar">
-                <span>{profile.photoText}</span>
-                {profile.photo && (
-                  <img
-                    src={profile.photo}
-                    alt={profile.name}
-                    onError={(event) => {
-                      event.currentTarget.style.display = 'none'
-                    }}
-                  />
-                )}
-              </div>
-            </div>
-            <h3>{profile.name}</h3>
-            <p>{profile.role}</p>
-            <div className="social-list">
-              {socials.map((social) => (
-                <a key={social.label} href={social.url} target="_blank" rel="noreferrer">
-                  {social.label}
-                </a>
-              ))}
-            </div>
-          </div>
+    <div className="dashboard-container">
+      {/* Glow Orbs buat ambient background aesthetic */}
+      <div className="glow-orb orb-alpha"></div>
+      <div className="glow-orb orb-beta"></div>
+
+      {/* Header Panel Bento */}
+      <header className="dash-header bento-card">
+        <div className="logo">CV<span>Studio_v2</span></div>
+        <div className="header-actions">
+          <button className="theme-btn" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
+            {theme === 'dark' ? '⚡ Light Mode' : '🌙 Dark Mode'}
+          </button>
+          <a href={`mailto:${profile.email}`} className="cta-mail">Hubungi Gw</a>
         </div>
-      </section>
-      <section className="stats-section">
-        {stats.map((item) => (
-          <div className="stat-card" key={item.label}>
-            <strong>{item.value}</strong>
-            <span>{item.label}</span>
+      </header>
+
+      {/* Grid Utama Bento */}
+      <main className="bento-grid">
+        
+        {/* Box 1: Profil Utama / Hero */}
+        <section className="bento-card cell-hero">
+          <span className="badge">Open for Opportunities</span>
+          <h1>{profile.name}</h1>
+          <p className="role-tag">{profile.role}</p>
+          <p className="summary-text">"{profile.summary}"</p>
+          <div className="info-pill-container">
+            <span>📍 {profile.location}</span>
+            <span>📧 {profile.email}</span>
+            <span>📱 {profile.phone}</span>
           </div>
-        ))}
-      </section>
-      <section className="content-section">
-        <div className="section-heading">
-          <span>About</span>
-          <h2>Profil Singkat</h2>
-        </div>
-        <div className="about-card">
-          <p>{profile.summary}</p>
-        </div>
-      </section>
-      <section className="content-section" id="skills">
-        <div className="section-heading">
-          <span>Skills</span>
-          <h2>Kemampuan Teknis</h2>
-        </div>
-        <div className="skills-grid">
-          {skills.map((skill) => (
-            <div className="skill-card" key={skill.name}>
-              <div className="skill-top">
-                <strong>{skill.name}</strong>
-                <span>{skill.level}%</span>
-              </div>
-              <div className="skill-bar">
-                <div style={{ width: `${skill.level}%` }}></div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-      <section className="content-section two-column" id="experience">
-        <div>
-          <div className="section-heading">
-            <span>Experience</span>
-            <h2>Pengalaman</h2>
+        </section>
+
+        {/* Box 2: Avatar & Sosmed Grid */}
+        <section className="bento-card cell-avatar">
+          <div className="glitch-avatar-wrap">
+            <div className="text-avatar">{profile.photoText}</div>
+            {profile.photo && (
+              <img 
+                src={profile.photo} 
+                alt={profile.name} 
+                className="parallax-img"
+                onError={(e) => (e.currentTarget.style.display = 'none')}
+              />
+            )}
           </div>
-          <div className="timeline">
-            {experiences.map((item) => (
-              <article className="timeline-item" key={`${item.position}-${item.company}`}>
-                <span>{item.period}</span>
-                <h3>{item.position}</h3>
-                <h4>{item.company}</h4>
-                <p>{item.description}</p>
-              </article>
+          <div className="social-links-grid">
+            {socials.map((s) => (
+              <a key={s.label} href={s.url} target="_blank" rel="noreferrer" className="social-pill">
+                {s.label}
+              </a>
             ))}
           </div>
-        </div>
-        <div>
-          <div className="section-heading">
-            <span>Education</span>
-            <h2>Pendidikan</h2>
-          </div>
-          <div className="timeline">
-            {education.map((item) => (
-              <article className="timeline-item" key={`${item.degree}-${item.school}`}>
-                <span>{item.period}</span>
-                <h3>{item.degree}</h3>
-                <h4>{item.school}</h4>
-                <p>{item.description}</p>
-              </article>
+        </section>
+
+        {/* Box 3: Quick Stats */}
+        <section className="bento-card cell-stats">
+          <div className="stats-inner">
+            {stats.map((st) => (
+              <div key={st.label} className="stat-box">
+                <span className="stat-val">{st.value}</span>
+                <span className="stat-lbl">{st.label}</span>
+              </div>
             ))}
           </div>
-        </div>
-      </section>
-      <section className="content-section" id="projects">
-        <div className="section-heading">
-          <span>Portfolio</span>
-          <h2>Project Pilihan</h2>
-        </div>
-        <div className="project-grid">
-          {projects.map((project) => (
-            <article className="project-card" key={project.title}>
-              <div className="project-icon">{project.title.charAt(0)}</div>
-              <h3>{project.title}</h3>
-              <p>{project.description}</p>
-              <div className="tech-list">
-                {project.tech.map((tech) => (
-                  <span key={tech}>{tech}</span>
-                ))}
+        </section>
+
+        {/* Box 4: Core Tech Stack */}
+        <section className="bento-card cell-skills">
+          <h3>Technical Skills</h3>
+          <div className="skills-vertical-list">
+            {skills.map((sk) => (
+              <div key={sk.name} className="skill-item">
+                <div className="skill-info">
+                  <span className="skill-name">{sk.name}</span>
+                  <span className="skill-pct">{sk.level}%</span>
+                </div>
+                <div className="progress-track">
+                  <div className="progress-fill" style={{ width: `${sk.level}%` }}></div>
+                </div>
               </div>
-            </article>
-          ))}
-        </div>
-      </section>
-      <section className="contact-section" id="contact">
-        <div>
-          <span>Contact</span>
-          <h2>Siap Berkolaborasi?</h2>
-          <p>Hubungi saya untuk diskusi project, internship, freelance, atau kolaborasi teknologi.</p>
-        </div>
-        <a href={`mailto:${profile.email}`} className="primary-button">Kirim Email</a>
-      </section>
-    </main>
+            ))}
+          </div>
+        </section>
+
+        {/* Box 5: Project Showcase dengan Scroll Inner */}
+        <section className="bento-card cell-projects">
+          <h3>Projects Showcase</h3>
+          <div className="project-scroll-container">
+            {projects.map((p) => (
+              <div key={p.title} className="mini-project-card">
+                <div className="p-header">
+                  <div className="p-icon">{p.title.charAt(0)}</div>
+                  <h4>{p.title}</h4>
+                </div>
+                <p>{p.description}</p>
+                <div className="p-tags">
+                  {p.tech.map((t) => <span key={t}>{t}</span>)}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Box 6: Pengalaman Kerja */}
+        <section className="bento-card cell-experience">
+          <h3>Work Experience</h3>
+          <div className="compact-timeline">
+            {experiences.map((exp) => (
+              <div key={exp.company} className="timeline-node">
+                <span className="time-dur">{exp.period}</span>
+                <h5>{exp.position} <span className="comp-name">@ {exp.company}</span></h5>
+                <p>{exp.description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Box 7: Riwayat Pendidikan */}
+        <section className="bento-card cell-education">
+          <h3>Education</h3>
+          <div className="compact-timeline">
+            {education.map((edu) => (
+              <div key={edu.school} className="timeline-node">
+                <span className="time-dur">{edu.period}</span>
+                <h5>{edu.degree}</h5>
+                <p className="school-text">{edu.school}</p>
+                <p>{edu.description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+      </main>
+
+      <footer className="dash-footer bento-card">
+        <p>CVStudio v2 // Rombak Total Edition © 2026</p>
+      </footer>
+    </div>
   )
 }
+
 export default App
