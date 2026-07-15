@@ -4,7 +4,7 @@
     "description": "Website CV React dengan Backend Node.js Express JSON siap deploy ke Render",
     "scripts": {
         "install-all": "npm install --prefix nodejs-backend && npm install --prefix react-frontend",
-        "build": "npm run build --prefix react-frontend && node build.js",
+        "build": "npm install && npm install --prefix react-frontend && npm run build",
         "start": "npm start --prefix nodejs-backend",
         "dev:backend": "npm run dev --prefix nodejs-backend",
         "dev:frontend": "npm run dev --prefix react-frontend"
